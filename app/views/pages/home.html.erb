@@ -7,7 +7,7 @@
     — built for secondary school students.
   </p>
   <% if user_signed_in? %>
-    <%= link_to "Browse Topics", topics_path, class: "btn btn-primary btn-lg" %>
+    <%= link_to "Browse Topics", root_path, class: "btn btn-primary btn-lg" %>
   <% else %>
     <%= link_to "Get Started", new_user_registration_path, class: "btn btn-primary btn-lg me-2" %>
     <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-secondary btn-lg" %>
