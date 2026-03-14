@@ -1,0 +1,29 @@
+class ChatsController < ApplicationController
+    def new
+      @topic = Topic.find(params[:topic_id])
+      @chat = Chat.new
+    end
+
+    def create
+        @topic = Topic.find(params[:topic_id])
+        @chat = @topic.chats.build(chat_params)
+        @chat.user = current_user
+          if @chat.save
+            redirect_to chat_path(@chat), notice: "Chat started successfully!"
+          else
+            render :new, status: :unprocessable_entity
+          end
+    end
+
+    def index 
+      @topic = Topic.find(params[:topic_id])
+      @chats = @topic.chats
+    end
+
+    private
+    def chat_params
+        params.require( :chat).permit( :message)
+    end
+end
+
+
