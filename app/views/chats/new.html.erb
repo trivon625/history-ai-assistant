@@ -1,0 +1,11 @@
+<div class="container">
+  <h1>Start a new chat for:  <%= @topic.title %></h1>
+
+  <%= simple_form_for [@topic, @chat] do |f| %>
+    <%= f.input :title, label: "New Chat", placeholder: "What would you like to know?" %>
+    
+    <%= f.button :submit, "Send", class: "btn btn-primary" %>
+    <% end %>
+
+    <%= link_to "Back", topic_path(@topic), class: "mt-3 d-block" %>
+</div>
