@@ -15,6 +15,12 @@ class ChatsController < ApplicationController
           end
     end
 
+    def show
+      @chat = Chat.find(params[:id])
+      @messages = @chat.messages
+      @message = Message.new
+    end
+
     def index 
       @topic = Topic.find(params[:topic_id])
       @chats = @topic.chats

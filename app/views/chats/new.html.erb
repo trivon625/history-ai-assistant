@@ -1,8 +1,9 @@
 <div class="container">
-  <h1> <%= @topic.name %></h1>
+  <h1>Start a new chat for:  <%= @topic.title %></h1>
 
   <%= simple_form_for [@topic, @chat] do |f| %>
-    <%= f.input :message, label: "New Chat", placeholder: "What would you like to know?" %>
+    <%= f.input :title, label: "New Chat", placeholder: "What would you like to know?" %>
+    
     <%= f.button :submit, "Send", class: "btn btn-primary" %>
     <% end %>
 
