@@ -1,15 +1,31 @@
-<div class="container text-center py-5">
-  <h1 class="display-4 fw-bold mb-3">
-    Learn History with AI 🏛️
-  </h1>
-  <p class="lead text-muted mb-4">
-    Pick a topic, ask quetions, and get simple explnations
-    — built for secondary school students.
-  </p>
-  <% if user_signed_in? %>
-    <%= link_to "Browse Topics", root_path, class: "btn btn-primary btn-lg" %>
-  <% else %>
-    <%= link_to "Get Started", new_user_registration_path, class: "btn btn-primary btn-lg me-2" %>
-    <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-secondary btn-lg" %>
-  <% end %>
+<div class="container py-5">
+  <!-- Hero section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 fw-bold mb-3">Learn History with AI 🏛️</h1>
+    <p class="lead text-muted mb-4">
+      Pick a topic, ask questions, and get simple explanations
+      — built for secondary school students.
+    </p>
+    <% unless user_signed_in? %>
+      <%= link_to "Get Started", new_user_registration_path, class: "btn btn-primary btn-lg me-2" %>
+      <%= link_to "Log in", new_user_session_path, class: "btn btn-outline-secondary btn-lg" %>
+    <% end %>
+  </div>
+
+  <!-- Topics section -->
+  <div class="row justify-content-center g-4">
+    <% @topics.each do |topic| %>
+      <div class="col-12 col-md-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <h5 class="card-title fw-bold"><%= topic.title %></h5>
+            <p class="card-text text-muted"><%= topic.description %></p>
+          </div>
+          <div class="card-footer bg-white border-0">
+            <%= link_to "Explore →", topic_path(topic), class: "btn btn-outline-primary w-100" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
