@@ -1,2 +1,9 @@
-<h1>Topics#show</h1>
-<p>Find me in app/views/topics/show.html.erb</p>
+<div class="container py-5">
+  <h1 class="fw-bold mb-4"><%= @topic.title %></h1>
+  <p class="text-muted mb-4"><%= @topic.description %></p>
+  <div class="card-footer bg-white border-0 d-flex flex-column gap-2">
+    <% chat = @topic.chats.first || @topic.chats.create(user: current_user) %>
+    <%= link_to "Go to Chat →", chat_path(chat), class: "btn btn-outline-primary w-100" %>
+    <%= link_to "Return to main menu →", topics_path, class: "btn btn-outline-primary w-100" %>
+  </div>
+</div>
