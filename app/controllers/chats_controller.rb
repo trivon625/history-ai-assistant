@@ -1,4 +1,11 @@
 class ChatsController < ApplicationController
+  before_action :set_chat, only: [:show]
+
+  def show
+    @topic = @chat.topic
+    @messages = @chat.messages.order(:created_at)
+    @message = Message.new
+  end
     def new
       @topic = Topic.find(params[:topic_id])
       @chat = Chat.new
@@ -22,22 +29,18 @@ class ChatsController < ApplicationController
             render :new, status: :unprocessable_entity
           end
     end
-
-    def show
-      @chat = Chat.find(params[:id])
-      @messages = @chat.messages
-      @message = Message.new
-    end
-
-    def index 
+    def index
       @topic = Topic.find(params[:topic_id])
       @chats = @topic.chats
     end
 
     private
+
     def chat_params
         params.require( :chat).permit( :title)
     end
+
+    def set_chat
+      @chat = Chat.find(params[:id])
+    end
 end
-
-
