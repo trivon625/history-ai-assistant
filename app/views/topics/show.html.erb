@@ -1,9 +1,12 @@
-<div class="container py-5">
+<div class="d-flex flex-column justify-content-center align-items-center text-center" style="min-height: 80vh;">
+
   <h1 class="fw-bold mb-4"><%= @topic.title %></h1>
-  <p class="text-muted mb-4"><%= @topic.description %></p>
-  <div class="card-footer bg-white border-0 d-flex flex-column gap-2">
-    <% chat = @topic.chats.first || @topic.chats.create(user: current_user) %>
-    <%= link_to "Go to Chat →", chat_path(chat), class: "btn btn-outline-primary w-100" %>
-    <%= link_to "Return to main menu →", topics_path, class: "btn btn-outline-primary w-100" %>
+  <p class="text-muted mb-4" style="max-width: 500px;"><%= @topic.description %></p>
+
+  <% chat = @topic.chats.first || @topic.chats.create(user: current_user) %>
+
+  <div class="d-flex flex-column gap-2">
+    <%= link_to "Go to Chat →", chat_path(chat), class: "btn btn-outline-primary" %>
+    <%= link_to "Return to main menu →", topics_path, class: "btn btn-outline-primary" %>
   </div>
 </div>
