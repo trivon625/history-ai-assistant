@@ -21,3 +21,30 @@
     </div>
   <% end %>
 </div>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-item-center mb-4">
+    <h1><%= @chat.title %></h1>
+    <%= link_to "Back to Topic", topic_path(@chat.topic), class: "btn btn-outline-secondary" %>
+  </div>
+
+  <div class="chat-box border rounded p-3 mb-4" style="height: 400px; overflow-y: scroll; background-color: #f8f9fa;">
+    <% if @messages.any? %>
+      <% @messages.each do |message| %>
+          <div class="mb-3 <%= message.role == 'user'? 'text-end' : 'text-start' %>">
+            <div class="d-inline-block p-2 rounded <%= message.role == 'user'? 'bg-primary text-white' : 'bg-light border' %>">
+              <%= message.content %>
+            </div>
+          </div>
+       <% end %>
+      <% else %>
+        <p class="text-center text-muted">No message yet</p>
+    <% end %>
+  </div>
+
+  <%= form_with(model: [@chat, @message], local: true, class: "d-flex gap-2") do |f| %>
+    <%= f.text_field :content, class: "form-control", placeholder: "Ask anything about history...", autofocus: true %>
+      <%= f.submit "Send", class: "btn btn-primary" %>
+    <% end %>
+</div>
+    
+
