@@ -1,2 +1,21 @@
-<h1>Topics#show</h1>
-<p>Find me in app/views/topics/show.html.erb</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+
+      <!-- Back button -->
+      <%= link_to "← All Topics", topics_path, class: "btn btn-outline-secondary mb-4" %>
+
+      <!-- Topic header -->
+      <div class="card shadow-sm border-0 p-4 mb-4">
+        <h1 class="fw-bold"><%= @topic.title %></h1>
+        <p class="lead text-muted"><%= @topic.description %></p>
+      </div>
+
+      <!-- Start chat button -->
+      <div class="text-center">
+        <%= link_to "Start Chatting →", root_path, class: "btn btn-primary btn-lg" %>
+      </div>
+
+    </div>
+  </div>
+</div>
