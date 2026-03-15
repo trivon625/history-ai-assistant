@@ -11,8 +11,10 @@ class MessagesController < ApplicationController
             history = @chat.messages.order(:created_at).map do |m|
                 {role: m.role, content: m.content}
             end
-            
-            ai_response = RubyLLM.chat.with_instructions(instructions).ask(history)
+
+            ai_response = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
+              .with_instructions(instructions)
+              .ask(history)
             ai_content = ai_response.content
             @chat.messages.create(role: "assistant", content: ai_content, user: current_user)
             redirect_to chat_path(@chat)
@@ -26,4 +28,3 @@ class MessagesController < ApplicationController
         params.require(:message).permit(:content)
     end
 end
-
