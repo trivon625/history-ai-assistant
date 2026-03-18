@@ -1,23 +1,117 @@
 <div class="container mt-5">
-<h1 class="display-4 text-primary"><%= @topic.title %></h1>
+  <h1 class="display-4 text-primary"><%= @topic.title %></h1>
 
-<div class="card my-4 shadow-sm">
-  <div class="card-body">
-    <p class="lead"><%= @topic.description %></p>
+  <div class="card my-4 shadow-sm">
+    <div class="card-body">
+      <p class="lead"><%= @topic.description %></p>
+    </div>
   </div>
-</div>
 
   <div class="d-flex gap-2 mb-5">
-    <%= link_to "Start a New Chat", new_topic_chat_path(@topic), class: "btn btn-success btn-lg" %>
+    <% chat = @topic.chats.where(user: current_user).last || @topic.chats.create(user: current_user, title: "New Chat") %>
+    <%= link_to "Start a New Chat", chat_path(chat), class: "btn btn-success btn-lg" %>
+
+    <button type="button" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#quizModal" data-topic-id="<%= @topic.id %>">
+      Generate Quiz Question
+    </button>
+
     <%= link_to "Back to All Topics", topics_path, class: "btn btn-outline-secondary btn-lg" %>
   </div>
 
+
   <div class="mt-5">
-    <h3 class="mb-3"> Your Previous Chats in this Topic:</h3>
+    <h3 class="mb-3">Your Previous Chats in this Topic:</h3>
     <div class="list-group">
       <% @topic.chats.where(user: current_user).each do |chat| %>
         <%= link_to chat.title, chat_path(chat), class: "list-group-item list-group-item-action" %>
-        <% end %>
+      <% end %>
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="quizModalLabel">Quiz Question</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="quizContent">Loading quiz...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script>
+let quizLoading = false;
+
+document.addEventListener("turbo:load", () => {
+  const quizModal = document.getElementById("quizModal");
+  const quizContent = document.getElementById("quizContent");
+
+  quizModal.addEventListener("show.bs.modal", async (event) => {
+    if (quizLoading) return; // evita duplicar fetchs
+    quizLoading = true;
+
+    const button = event.relatedTarget;
+    if (!button) return;
+
+    const topicId = button.dataset.topicId;
+    quizContent.innerHTML = "<p>Loading question...</p>";
+
+    try {
+      const response = await fetch(`/topics/${topicId}/generate_quiz`);
+      if (!response.ok) throw new Error("Network error");
+
+      const quiz = await response.json();
+
+      if (!quiz.answers || quiz.answers.length !== 3) {
+        quizContent.innerHTML = "<p class='text-danger'>Failed to generate quiz. Try again.</p>";
+        return;
+      }
+
+      quizContent.innerHTML = `
+        <p class="lead">${quiz.question}</p>
+        <div id="quizButtons" class="d-grid gap-2">
+          ${quiz.answers.map(a => `<button class="quiz-option btn btn-outline-primary mb-2 w-100" data-correct="${a.correct}">${a.text}</button>`).join('')}
+        </div>
+      `;
+
+      const quizButtons = document.getElementById("quizButtons");
+
+      const handleClick = (e) => {
+        const btn = e.target.closest(".quiz-option");
+        if (!btn) return;
+
+        quizButtons.querySelectorAll(".quiz-option").forEach(b => {
+          if (b.dataset.correct === "true") b.classList.replace("btn-outline-primary","btn-success");
+          else if (b === btn) b.classList.replace("btn-outline-primary","btn-danger");
+          b.disabled = true;
+        });
+
+        if (btn.dataset.correct === "true") {
+          try {
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+          } catch(err) { console.warn(err); }
+        }
+
+        quizButtons.removeEventListener("click", handleClick); // evita duplicados
+      };
+
+      quizButtons.addEventListener("click", handleClick);
+
+    } catch(err) {
+      console.error(err);
+      quizContent.innerHTML = "<p class='text-danger'>Failed to load quiz. Please try again.</p>";
+    } finally {
+      quizLoading = false;
+    }
+  });
+
+  quizModal.addEventListener("hidden.bs.modal", () => {
+    quizContent.innerHTML = "Loading quiz...";
+  });
+});
+</script>
