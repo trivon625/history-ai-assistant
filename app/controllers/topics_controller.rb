@@ -6,9 +6,6 @@ class TopicsController < ApplicationController
   end
 
   def show
-    @chat = @topic.chats.where(user: current_user).last || @topic.chats.create(user: current_user, title: "New Chat")
-    @messages = @chat.messages.order(:created_at)
-    @message = Message.new
   end
 
   def generate_quiz

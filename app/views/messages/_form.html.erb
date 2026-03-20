@@ -1,0 +1,7 @@
+<%= form_with model: [chat, message], local: false do |f| %>
+  <div class="mb-2">
+    <%= f.text_area :content, placeholder: "Type your question...", rows: 4, class: "form-control" %>
+    <%= f.hidden_field :role, value: "user" %>
+  </div>
+  <%= f.submit "Send", class: "btn btn-primary" %>
+<% end %>
