@@ -6,14 +6,20 @@ class MessagesController < ApplicationController
         @message.role = "user"
 
       if @message.save
-        chat_title = @chat.title
-        instructions = "You are a world-class historian specializing in #{chat_title}."
-        history = @chat.messages.order(:created_at).map do |m|
-          { role: m.role, content: m.content }
-        end
-        ai_response = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
+        chat_topic = @chat.topic
+        instructions = <<~PROMPT 
+          #{chat_topic.ai_instructions} 
+          The user's name is #{current_user.name}.
+          Always use their name when replying.
+          The current topic is : #{chat_topic.title}.
+          You must only answerquestions about this topic.
+        PROMPT
+        chat_ai = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
                         .with_instructions(instructions)
-                        .ask(history)
+        @chat.messages.order(:created_at).each do |m|
+         chat_ai.add_message(role: m.role, content: m.content)
+        end
+        ai_response = chat_ai.ask(@message.content)
         ai_content = ai_response.content
         @chat.messages.create(role: "assistant", content: ai_content, user: current_user)
 
@@ -23,7 +29,8 @@ class MessagesController < ApplicationController
         end
       else
         respond_to do |format|
-          format.turbo_stream { render turbo_stream: turbo_stream.replace("new_message_container", partial: "messages/form", locals: { chat: @chat, message: @message }) }
+          format.turbo_stream do render turbo_stream: turbo_stream.replace("new_message_container", partial: "messages/form", locals: { chat: @chat, message: @message })
+        end 
           format.html { render "chats/show", status: :unprocessable_entity }
         end
       end
@@ -34,3 +41,6 @@ class MessagesController < ApplicationController
         params.require(:message).permit(:content)
     end
 end
+
+
+
