@@ -11,7 +11,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   resources :topics, only: [:index, :show] do
-    resources :chats, only: [:new, :create, :index]
+    resources :chats, only: [:index, :new, :create]
+    get :generate_quiz, on: :member
   end
   resources :chats, only: [:show] do
     resources :messages, only: [:create]

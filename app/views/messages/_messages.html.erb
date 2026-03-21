@@ -1,0 +1,17 @@
+<% messages.each do |message| %>
+  <% if message.role == "user" %>
+    <div class="d-flex flex-column align-items-end mb-3">
+      <span class="text-muted mb-1" style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px;">YOU</span>
+      <div class="p-3" style="background-color: #007bff; color: white; max-width: 75%; border-radius: 18px 18px 4px 18px;">
+        <%= message.content %>
+      </div>
+    </div>
+  <% else %>
+    <div class="d-flex flex-column align-items-start mb-3">
+      <span class="text-muted mb-1" style="font-size: 11px; font-weight: 600; letter-spacing: 0.5px;">ASSISTANT</span>
+      <div class="p-3" style="background-color: #e9ecef; color: #333; max-width: 75%; border-radius: 18px 18px 18px 4px;">
+        <%= simple_format(message.content) %>
+      </div>
+    </div>
+  <% end %>
+<% end %>
