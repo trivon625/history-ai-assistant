@@ -21,12 +21,16 @@ class ChatsController < ApplicationController
         @chat.messages.create(content: @chat.title, user: current_user, role: "user")
 
         # Get AI response
-        instructions = "You are a world-class historian specializing in #{@chat.title}."
-        history = [{ role: "user", content: @chat.title }]
-        ai_content = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
-                      .with_instructions(instructions)
-                      .ask(history)
-                      .content
+        instructions = <<~PROMPT
+          #{@topic.ai_instructions}
+          The user's name is #{current_user.name}.
+          Always use their name when replying.
+          The current topic is: #{@topic.title}.
+          You must only answer questions about this topic.
+        PROMPT
+        chat_ai = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
+                    .with_instructions(instructions)
+        ai_content = chat_ai.ask(@chat.title).content
         @chat.messages.create(role: "assistant", content: ai_content, user: current_user)
 
         redirect_to chat_path(@chat), notice: "Chat started successfully!"
@@ -38,6 +42,13 @@ class ChatsController < ApplicationController
   def index
     @topic = Topic.find(params[:topic_id])
     @chats = @topic.chats
+  end
+
+  def destroy
+    @chat = Chat.find(params[:id])
+    @topic = @chat.topic
+    @chat.destroy
+    redirect_to topic_path(@topic), notice: "Chat deleted successfully!"
   end
 
   private

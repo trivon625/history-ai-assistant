@@ -1,7 +1,9 @@
 <%= form_with model: [chat, message], local: false do |f| %>
-  <div class="mb-2">
-    <%= f.text_area :content, placeholder: "Type your question...", rows: 4, class: "form-control" %>
+  <div class="d-flex gap-2 align-items-end">
+    <%= f.text_area :content, placeholder: "Type your question...", rows: 1, class: "form-control",
+        style: "border-radius: 20px; padding: 10px 16px; resize: none; overflow: hidden; min-height: 42px;",
+        oninput: "this.style.height='auto'; this.style.height=this.scrollHeight+'px'" %>
     <%= f.hidden_field :role, value: "user" %>
+    <%= f.submit "Send", class: "btn btn-primary", style: "border-radius: 20px; padding: 8px 24px; white-space: nowrap;" %>
   </div>
-  <%= f.submit "Send", class: "btn btn-primary" %>
 <% end %>
