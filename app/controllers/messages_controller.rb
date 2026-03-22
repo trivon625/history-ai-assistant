@@ -12,7 +12,7 @@ class MessagesController < ApplicationController
           The user's name is #{current_user.name}.
           Always use their name when replying.
           The current topic is : #{chat_topic.title}.
-          You must only answerquestions about this topic.
+          You must only answer questions about this topic.
         PROMPT
         chat_ai = RubyLLM.chat(model: "claude-haiku-4-5-20251001")
                         .with_instructions(instructions)
