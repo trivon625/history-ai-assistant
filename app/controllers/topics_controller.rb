@@ -29,7 +29,8 @@ class TopicsController < ApplicationController
         ]
       }
       Do not include any explanation or extra text.
-      Include a random number between 1-1000 in the JSON comment field to force variation: #{rand(1..1000)}
+      You MUST generate a completely different question every time. Never repeat a question.
+      This request has a unique ID to ensure variation: #{SecureRandom.hex(8)}
     INSTR
 
     begin
