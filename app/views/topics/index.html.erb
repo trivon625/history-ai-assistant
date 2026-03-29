@@ -1,19 +1,69 @@
-<div class="container py-5">
-  <%= link_to "← Home", root_path, class: "btn btn-outline-secondary mb-4" %>
-  <h1 class="fw-bold mb-4">Choose a Topic</h1>
-  <div class="row g-4">
+<div class="container-fluid py-5" style="background-color: #fdf6e3; min-height: 100vh; font-family: 'Georgia', serif;">
+  <div class="container main-content">
+    <div class="text-center mb-5">
+
+      <%= link_to "← Home", root_path, class: "btn btn-sm mb-3 rounded-pill px-4 shadow-sm",
+      style: "background-color: #f3e2cc; color: #0c3470; border: 1px solid rgba(12,52,112,0.2);" %>
+        <h1 class=""display-4 fw-bold fs-2-mobile text-dark" style="color: #0c3470 ! important;
+        font-family: 'Times New Roman', Times, serif;">Master History</h1>
+        <p class="lead text-muted"> Choose a Topic to start your personal AI history</p>
+  </div>
+
+<div class="row g-4">
     <% @topics.each do |topic| %>
       <div class="col-12 col-md-4">
-        <div class="card h-100 shadow-sm border-0">
-          <div class="card-body">
-            <h5 class="card-title fw-bold"><%= topic.title %></h5>
-            <p class="card-text text-muted"><%= topic.description %></p>
-          </div>
-          <div class="card-footer bg-white border-0">
-            <%= link_to "Explore →", topic_path(topic), class: "btn btn-outline-primary w-100" %>
+
+     <div class="card h-100 border-0 shadow-sm" style="overflow-hidden; border-radius: 20px;
+        position: relative; background-color: transparent;">
+      <div style="height: 250px; width: 100%; overflow: hidden;"> 
+          <% if topic.title.downcase.include?("world war") %>
+            <%= image_tag "world-war_1.png", class: "w-100 h-100 img-fluid", style: "object-fit: cover;" %>
+              <% elsif topic.title.downcase.include?("french revolution") %>
+              <%= image_tag "french-revolution.png", class: "w-100 h-100 img-fluid", style: "object-fit: cover;" %>
+              <% elsif topic.title.downcase.include?("roman empire") %>
+              <%= image_tag "roman_empire.png", class: "w-100 h-100 img-fluid", style: "object-fit: cover;" %>
+          <% end %>
+      </div>
+        <div class="card-body text-white p-4"style="background-color: #0c3470;
+          margin-top: -60px; border-radius: 25px 25px 0 0; position: relative; z-index: 2;
+          display: flex; flex-direction: column; min-height: 200px;">
+            <h3 class="h5 fw-bold mb-2" style="font-family: 'Times New Roman', Times, serif;"><%= topic.title %></h3>
+            <p class="card-text mb-4" style="color: rgba(225,225,225,0.7); 
+            font-size: 0.85rem; flex-grow: 1;"><%= topic.description %></p>
+          
+           <%= link_to "Explore →", topic_path(topic), class: "btn w-100 fw-bold py-2 mt-auto",
+            style: "background-color: #e2b808; color: #0c3470; border-radius: 10px; border: none;" %>
           </div>
         </div>
       </div>
     <% end %>
+   </div>
   </div>
 </div>
+  
+<style>
+.main-content{
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 40px 15px;
+}
+.card-body{
+  background: white;
+  position: relative;
+  z-index: 2;
+  margin-top: -60px;
+  margin-left: 15px;
+  border-radius: 10px;
+  padding: 20px !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+@media(max-width: 768PX) {
+  .display-4{
+    font-size: 2.5rem !important;
+  }
+  .card-body{
+    margin-top: -25px !important;
+    padding: 15px !important;
+  }
+}
+

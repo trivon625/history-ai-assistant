@@ -9,36 +9,71 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+    .main-navbar {
+      background-color: rgb(12, 52, 112) !important;
+      border-bottom: 3px solid rbg(226, 184, 8) !important;
+    }
+    .nav-gold-button {
+      background-color: rgba(225, 193, 7, 1) !important;
+      color: rgb(12,52,112) !important;
+      font-weight: bold;
+      padding: 6px 22px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .nav-gold-button:hover {
+      background-color: rgb(255, 222, 89) !important;
+      transform: translateY(-1px);
+    }
+    .form-control::placeholder {
+      font-size: 14px !important;
+    }
+    @media(max-width: 767px) {
+      .form-control::placeholder {
+        font-size: 11px !important;
+      }
+    }
+    </style>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
       <div class="container">
-        <a class="navbar-brand" href="/">History AI Assistant</a>
-        <div class="collapse navbar-collapse">
+        <a class="navbar-brand fw-bold" href="/" style="font-family: 'Times new Roman', Times, serif;
+        letter-spacing: 1px;">History AI Assistant</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+          data-bs-target="#navbarContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav ms-auto">
             <% if user_signed_in? %>
-              <li class="nav-item">
-                <span class="nav-link text-light">
+              <li class="nav-item mb-2">
+                <span class="nav-gold-button me-2" style="font-family:'Times New Roman', serif;">
                   <%=  current_user.name %>
                 </span>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mb-2">
                 <%= link_to "Log out",
                   destroy_user_session_path,
                   data: { turbo_method: :delete },
-                  class: "nav-link" %>
+                  class: "nav-gold-button me-2", style: "font-family:'Times new Roman', serif;" %>
               </li>
             <% else %>
-              <li class="nav-item">
+              <li class="nav-item mb-2">
                 <%= link_to "Log in",
                   new_user_session_path,
-                  class: "nav-link" %>
+                  class: "nav-gold-button me-2", style: "font-family:'Times new Roman', serif;" %>
               </li>
-              <li class="nav-item">
+              <li class="nav-item mb-2">
                 <%= link_to "Sign up",
                   new_user_registration_path,
-                  class: "nav-link" %>
+                  class: "nav-gold-button me-2", style: "font-family:'Times new Roman', serif;" %>
               </li>
             <% end %>
           </ul>
