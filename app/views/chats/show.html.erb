@@ -1,11 +1,26 @@
-<div class="mx-auto mt-5" style="max-width: 780px;">
+<div class="topic-bg-overlay">
+<% if @topic.title.downcase.include?("world war") %>
+<%= image_tag "world-war_1.png", class: "bg-img" %>
+<% elsif @topic.title.downcase.include?("french revolution") %>
+<%= image_tag "french-revolution.png", class: "bg-img" %>
+<% elsif @topic.title.downcase.include?("roman empire") %>
+<%= image_tag "roman_empire.png", class: "bg-img" %>
+<% end %>
+<div class="content-layer"></div>
+</div>
 
-  <%= link_to "← Back to Topic", topic_path(@chat.topic), class: "btn btn-outline-secondary btn-sm mb-3", style: "border-radius: 20px;" %>
+
+<div class="container mx-auto mt-5" style="max-width: 780px; padding: 0 15px;">
+
+  <%= link_to "← Back to Topic", topic_path(@chat.topic), class: "btn btn-outline-secondary btn-sm mb-3", 
+  style: "border-radius: 20px; background-color: rgb(12, 52, 112); color: white; border: none; padding: 8px 16px;" %>
 
   <% if @chat %>
-    <div class="chat-container p-4" style="background-color: #f8f9fa; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
+    <div class="chat-container p-4" style="background-color: rgb(253, 246, 227);
+     border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08);">
 
-      <h2 class="mb-3">Chat about <%= @topic.title %></h2>
+      <h2 class="mb-3" style="font-weight: 900; font-family: 'Times New Roman', Times, serif;
+       color: rgb(12, 52, 112);">Chat about <%= @topic.title %></h2>
 
       <div id="messages" class="messages mb-3 p-3" style="height: 550px; overflow-y: auto;">
         <%= render "messages/messages", messages: @messages %>
@@ -19,3 +34,51 @@
   <% end %>
 
 </div>
+
+<style>
+.topic-bg-overlay { 
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  margin: 0;
+  padding: 0;
+  pointer-events: none;
+  }
+.bg-img {
+  
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.2;
+  }
+.content-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(253, 246, 227, 0.4);
+  z-index: -1;}
+  .container.mt-5 {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    padding-bottom: 30px !important;
+  }
+  .chat-container {
+    width: 100% ;
+    margin: 0 auto;
+  }
+  @media (max-width: 767px) {
+    .chat-container {
+      padding: 20 !important;
+      border-radius: 20px;
+    }
+    .chat-container h2 {
+      font-size: 1.5rem !important;
+    }
+  }
+</style>
